@@ -33,6 +33,43 @@ class Player(CircleShape):
     def is_invulnerable(self):
         return self.invulnerable_timer > 0
 
+    def collides_with(self, other):
+        """Triangle-circle collision detection."""
+        triangle = self.triangle()
+
+        # Check if any triangle vertex is inside the circle
+        for vertex in triangle:
+            if vertex.distance_to(other.position) <= other.radius:
+                return True
+
+        # Check if any triangle edge intersects the circle
+        for i in range(3):
+            start = triangle[i]
+            end = triangle[(i + 1) % 3]
+            if self._line_circle_collision(start, end, other.position, other.radius):
+                return True
+
+        return False
+
+    def _line_circle_collision(self, line_start, line_end, circle_center, circle_radius):
+        """Check if a line segment intersects a circle."""
+        # Vector from line start to end
+        line_vec = line_end - line_start
+        # Vector from line start to circle center
+        to_circle = circle_center - line_start
+
+        # Project circle center onto line
+        line_length_sq = line_vec.length_squared()
+        if line_length_sq == 0:
+            return to_circle.length() <= circle_radius
+
+        # Find closest point on line segment to circle center
+        t = max(0, min(1, to_circle.dot(line_vec) / line_length_sq))
+        closest_point = line_start + line_vec * t
+
+        # Check distance from closest point to circle center
+        return closest_point.distance_to(circle_center) <= circle_radius
+
     def respawn(self, x, y):
         self.position = pygame.Vector2(x, y)
         self.velocity = pygame.Vector2(0, 0)

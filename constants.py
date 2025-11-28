@@ -1,3 +1,13 @@
+from enum import Enum, auto
+
+
+class GameState(Enum):
+    MENU = auto()
+    PLAYING = auto()
+    PAUSED = auto()
+    GAME_OVER = auto()
+
+
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
 PLAYER_RADIUS = 20
@@ -13,6 +23,9 @@ ASTEROID_KINDS = 3
 ASTEROID_SPAWN_RATE_SECONDS = 0.8
 ASTEROID_MAX_RADIUS = ASTEROID_MIN_RADIUS * ASTEROID_KINDS
 ASTEROID_SPLIT_SPEED = 1.2
+ASTEROID_VERTICES = 10           # Number of vertices in asteroid shape
+ASTEROID_JAGGEDNESS = 0.4        # How lumpy (0 = circle, 1 = very jagged)
+ASTEROID_ROTATION_SPEED = 40     # Degrees per second
 
 SHOT_RADIUS = 5
 PLAYER_SHOOT_SPEED = 500
